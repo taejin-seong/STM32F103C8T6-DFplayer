@@ -1,0 +1,5 @@
+ap.c:18:6:apInit	8	static
+ap.c:26:6:apBoardTest	16	static
+ap.c:44:6:apUartTest	8	static
+ap.c:62:6:apGpioTest	8	static
+ap.c:76:6:apDFPlayerTest	16	static
