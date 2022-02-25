@@ -82,7 +82,7 @@ void apDFPlayerTest(void)
 	dfplayer_SetSource(PLAYBACK_SOURCE_TF);
 	dfplayer_SetVolume(10);
 	dfplayer_SetEQ(EQ_CLASSIC);
-//	dfplayer_RepeatTrack(1);
+	dfplayer_RepeatTrack(1);
 
 	while(1)
 	{
@@ -142,12 +142,6 @@ void apDFPlayerTest(void)
 					dfplayer_Play3KFolder(2, 3000);
 					uartPrintf(_DEF_UART2, "Test\n");
 					break;
-
-				case 'L':
-					dfplayer_RepeatTrackInFolder(0x02);
-					uartPrintf(_DEF_UART2, "Test\n");
-					break;
-
 
 				default:
 					break;

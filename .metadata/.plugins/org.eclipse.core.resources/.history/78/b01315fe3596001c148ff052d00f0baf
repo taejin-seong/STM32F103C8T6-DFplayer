@@ -3,8 +3,6 @@
  *
  *  Created on: 2022. 2. 23.
  *      Author: sungt
- *
- *
  */
 
 
@@ -153,7 +151,7 @@ void dfplayer_DecreaseVolume(void)// Test complete
 
 
 /*
- * @brief  	초기 볼륨값 설정, default는 30
+ * @brief  	초기 볼륨값 설정
  * @param  	volume  		1 ~ 30까지 선택
  *
  */
@@ -271,8 +269,8 @@ void dfplayer_Pause(void)// Test complete
 
 
 /**
- * @brief	특수 폴더를 제외한 01~99번 폴더 안에 재생하고 싶은 mp3 파일 재생 설정
- * @note	트랙의 범위는 255로 제한
+ * @brief	폴더 안에 재생하고 싶은 mp3 파일 재생 설정
+ * @note	기본 폴더, MP3 파일 형식을 따름
  * @param  	folder  				01 ~ 99 까지
  * @param  	track  					001 ~ 255 까지
  */
@@ -281,11 +279,6 @@ void dfplayer_PlayTrackInFolder(uint8_t folder, uint8_t track) //TODO ongoing - 
 	if (folder > 99)
 	{
 		folder = 99;
-	}
-
-	if (track > 255)
-	{
-		track = 255;
 	}
 
 	dfplayer_SendControlMessage(CMD_SET_PLAY_TRACK_FOLDER, folder, track);
@@ -337,7 +330,7 @@ void dfplayer_PlayMP3Folder(uint16_t track)// Test complete
 
 
 /**
- * @brief   음악파일 재생중에 ADVERT폴더 안에 저장된 파일로 끼어들기(인터럽트)
+ * @brief   음악파일 재생중에 ADVERT폴더 안에 저장된 파일로 끼어들기(인터럽트), 마치 TV프로그램 광고처럼 (인터럽트)
  * @note    ADVERT 폴더는 3000개 트랙 지원
  * @param  	track  			1 ~ 30000 (or 0 ~ 2999) 파일명 넘버링에 따라 둘 중 하나의 범위를 가짐
  */
@@ -349,7 +342,8 @@ void dfplayer_InsertAdvertisement(uint16_t track)// Test complete
 
 
 /**
- * @brief   3000개 트랙 지원하는 01~15번 폴더에서 트랙을 선택하여 재생
+ * @brief   3000개 트랙 지원하는 폴더에서  선택하여 재생
+ * @note    01~15 폴더명 한에서 각 폴더에 최대 3000개 트랙을 지원함.
  * @param  	folder  		1~ 15
  * @param  	track  			1 ~ 30000 (or 0 ~ 2999) 파일명 넘버링에 따라 둘 중 하나의 범위를 가짐
  */
@@ -398,6 +392,7 @@ void dfplayer_Stop(void)// Test complete
 /**
  * @brief   지정한 폴대 내 반복 재생
  * @note 	stop 커맨드 명렁어가 올 때 까지 멈추지 않고 반복
+ * @warning 폴더 이름은 01~99까지만 가능, 각 폴더 내에는 255개 mp3/wmv 파일만 가능
  */
 void dfplayer_RepeatTrackInFolder(uint8_t folder) //TODO ongoing - 2
 {
@@ -416,7 +411,7 @@ void dfplayer_RepeatTrackInFolder(uint8_t folder) //TODO ongoing - 2
  * @brief   랜덤으로 트랙 재생
  *
  */
-void dfplayer_RandomTrack(void) // Test complete
+void dfplayer_RandomTrack(void) //TODO ongoing - 1
 {
 	dfplayer_SendControlMessage(CMD_RANDOM_PLAY, 0, 0);
 }
@@ -428,7 +423,7 @@ void dfplayer_RandomTrack(void) // Test complete
  * @param  	turn_onoff      True (1) : Turn On,  False (0) : Turn Off
  * @warning stop이나 pause인 상태에서는 응답하지 않음. turn_onoff를 사용하여 정지시킬 수 있음
  */
-void dfplayer_RepeatCurrentTrack(bool turn_onoff) // Test complete
+void dfplayer_RepeatCurrentTrack(bool turn_onoff)// Test complete
 {
 	dfplayer_SendControlMessage(CMD_RANDOM_PLAY, 0, !turn_onoff);
 }

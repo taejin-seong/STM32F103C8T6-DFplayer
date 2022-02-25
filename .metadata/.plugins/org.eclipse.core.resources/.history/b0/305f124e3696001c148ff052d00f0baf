@@ -153,7 +153,7 @@ void dfplayer_DecreaseVolume(void)// Test complete
 
 
 /*
- * @brief  	초기 볼륨값 설정, default는 30
+ * @brief  	초기 볼륨값 설정
  * @param  	volume  		1 ~ 30까지 선택
  *
  */
@@ -416,7 +416,7 @@ void dfplayer_RepeatTrackInFolder(uint8_t folder) //TODO ongoing - 2
  * @brief   랜덤으로 트랙 재생
  *
  */
-void dfplayer_RandomTrack(void) // Test complete
+void dfplayer_RandomTrack(void) //TODO ongoing - 1
 {
 	dfplayer_SendControlMessage(CMD_RANDOM_PLAY, 0, 0);
 }
@@ -428,7 +428,7 @@ void dfplayer_RandomTrack(void) // Test complete
  * @param  	turn_onoff      True (1) : Turn On,  False (0) : Turn Off
  * @warning stop이나 pause인 상태에서는 응답하지 않음. turn_onoff를 사용하여 정지시킬 수 있음
  */
-void dfplayer_RepeatCurrentTrack(bool turn_onoff) // Test complete
+void dfplayer_RepeatCurrentTrack(bool turn_onoff)// Test complete
 {
 	dfplayer_SendControlMessage(CMD_RANDOM_PLAY, 0, !turn_onoff);
 }

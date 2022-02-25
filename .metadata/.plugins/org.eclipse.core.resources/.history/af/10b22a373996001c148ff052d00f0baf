@@ -3,21 +3,6 @@
  *
  *  Created on: 2022. 2. 23.
  *      Author: sungt
- *
- *
- ******************************************************************************
- * @attention
- *
- * #0. mp3/wmv 인덱스 번호는 파일명이 아닌 파일의 물리적인 순서
- * #1. 루프 디렉토리에 있는 트랙은 3000곡 까지 선택 재생 가능 (CMD_SET_TRAK_NUMBER : CMD 0x03)
- * #2. 폴더는 01 ~ 99개 까지 지원
- * #3. 01 ~ 15번 폴더는 3000트랙 까지 지원, 16 ~ 99번 폴더는 255트랙 까지 지원 (CMD_SET_PLAY_TRACK_FOLDER : 0x0F)
- * #4. MP3 특수 폴더 생성 시 MP3 폴더는 65536 트랙까지 지원하나 속도가 느려지므로 3000 트랙까지 권장  (CMD_SET_MP3_FOLDER : 0x12)
- * #5. ADVERT 특수 폴더 생성 시 ADVERT 폴더는 3000 트랙 지원
- * #6. ADVERT 특수 폴더를 이용하여 인터럽트 제어 가능  (CMD_INSERT_ADVERT : 0x13, CMD_STOP_ADVERT_GOBACK : 0x15)
- *
- *
- *
  */
 
 #ifndef SRC_COMMON_HW_INCLUDE_DFPLAYER_H_
@@ -39,6 +24,16 @@
  * @brief	Directly send commands, no parameters returned
  * @note 	DFplayer의 동작 명령어
  *
+ *****************************************************************************
+ * @attention
+ *
+ * #0. mp3/wmv 인덱스 번호는 파일명이 아닌 파일의 물리적인 순서
+ * #1. 루프 디렉토리에 있는 트랙은 3000곡 까지 선택 재생 가능 (CMD_SET_TRAK_NUMBER : CMD 0x03)
+ * #2. 폴더는 01 ~ 99개 까지 지원
+ * #3. 01 ~ 15번 폴더는 3000트랙 까지 지원, 16 ~ 99번 폴더는 255트랙 까지 지원 (CMD_SET_PLAY_TRACK_FOLDER : 0x0F)
+ * #4. MP3 특수 폴더 생성 시 MP3 폴더는 65536 트랙까지 지원하나 속도가 느려지므로 3000 트랙까지 권장  (CMD_SET_MP3_FOLDER : 0x12)
+ * #5. ADVERT 특수 폴더 생성 시 ADVERT 폴더는 3000 트랙 지원
+ * #6. ADVERT 특수 폴더를 이용하여 인터럽트 제어 가능  (CMD_INSERT_ADVERT : 0x13, CMD_STOP_ADVERT_GOBACK : 0x15)
  */
 
 /* Control Commands */

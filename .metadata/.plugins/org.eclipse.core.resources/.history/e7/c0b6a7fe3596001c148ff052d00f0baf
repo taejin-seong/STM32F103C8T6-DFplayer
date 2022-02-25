@@ -3,21 +3,6 @@
  *
  *  Created on: 2022. 2. 23.
  *      Author: sungt
- *
- *
- ******************************************************************************
- * @attention
- *
- * #0. mp3/wmv 인덱스 번호는 파일명이 아닌 파일의 물리적인 순서
- * #1. 루프 디렉토리에 있는 트랙은 3000곡 까지 선택 재생 가능 (CMD_SET_TRAK_NUMBER : CMD 0x03)
- * #2. 폴더는 01 ~ 99개 까지 지원
- * #3. 01 ~ 15번 폴더는 3000트랙 까지 지원, 16 ~ 99번 폴더는 255트랙 까지 지원 (CMD_SET_PLAY_TRACK_FOLDER : 0x0F)
- * #4. MP3 특수 폴더 생성 시 MP3 폴더는 65536 트랙까지 지원하나 속도가 느려지므로 3000 트랙까지 권장  (CMD_SET_MP3_FOLDER : 0x12)
- * #5. ADVERT 특수 폴더 생성 시 ADVERT 폴더는 3000 트랙 지원
- * #6. ADVERT 특수 폴더를 이용하여 인터럽트 제어 가능  (CMD_INSERT_ADVERT : 0x13, CMD_STOP_ADVERT_GOBACK : 0x15)
- *
- *
- *
  */
 
 #ifndef SRC_COMMON_HW_INCLUDE_DFPLAYER_H_
@@ -38,6 +23,9 @@
 /*
  * @brief	Directly send commands, no parameters returned
  * @note 	DFplayer의 동작 명령어
+ * @warning 기본 : 최대 99개 폴더 지원, 각 폴더에 최대 255개 트랙 지원
+ *			특수 : MP3 또는 ADVERT폴더 생성 시 해당 폴더 안 에는 3000개 트랙 지원
+ * 			     MP3 폴더는 사실 최대 65536 트랙을 지원하지만 속도가 느려지므로 3000개의 트랙만 사용할 것 을 권장
  *
  */
 
@@ -56,7 +44,7 @@
 #define CMD_RESET                     0x0C    //   모듈 초기화
 #define CMD_PLAYBACK                  0x0D    //   재생
 #define CMD_PAUSE                     0x0E    //   일시 정지
-#define CMD_SET_PLAY_TRACK_FOLDER     0x0F    //   재생 폴더 및 트랙 지정				folder : 01 ~ 99 / folder 01 ~ 15 -> track : 001 ~ 3000 / folder 16 ~ 99 -> track : 001 ~ 255
+#define CMD_SET_PLAY_TRACK_FOLDER     0x0F    //   재생 폴더 및 트랙 지정				folder : 01 ~ 99 / track : 001 ~ 255
 #define CMD_VOLUME_ADJUST             0x10    //   볼륨 조정						Parameter_MSB= 1: Open volume adjust / Parameter_LSB = set volume gain 0 ~ 31
 #define CMD_REPEAT					  0x11    //   반복 재생						0 : stop play / 1 : start repeat play
 #define CMD_SET_MP3_FOLDER            0x12    //   MP3라는 폴더가 있을 시 재생폴더로 지정
