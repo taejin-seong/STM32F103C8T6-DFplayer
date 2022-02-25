@@ -82,7 +82,7 @@ void apDFPlayerTest(void)
 	dfplayer_SetSource(PLAYBACK_SOURCE_TF);
 	dfplayer_SetVolume(10);
 	dfplayer_SetEQ(EQ_CLASSIC);
-	dfplayer_SetMode(PLAYBACK_MODE_REPEAT);
+	dfplayer_RepeatTrack(1);
 
 	while(1)
 	{
@@ -121,6 +121,21 @@ void apDFPlayerTest(void)
 				case 'X':
 					dfplayer_DecreaseVolume();
 					uartPrintf(_DEF_UART2, "Volume Down\n");
+					break;
+
+				case 'V':
+					dfplayer_Stop();
+					uartPrintf(_DEF_UART2, "Stop\n");
+					break;
+
+				case 'E':
+					dfplayer_InsertAdvertisement(1);
+					uartPrintf(_DEF_UART2, "AD...\n");
+					break;
+
+				case 'T':
+					dfplayer_StopAdvertisement();
+					uartPrintf(_DEF_UART2, "AD STOP..\n");
 					break;
 
 				default:

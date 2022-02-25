@@ -8,7 +8,7 @@
 
 /*******************************************
  *                                         *
- *   UART ->  [ ���� : DMA,  �۽� : DMA ] ���     *
+ *   UART ->  [RX : DMA,  TX : DMA ]       *
  *                                         *
  *******************************************/
 
@@ -26,7 +26,7 @@ static qbuffer_t  qbuffer[UART_MAX_CH];
 static uint8_t    rx_buf[UART_MAX_BUF_SIZE];
 static uint8_t    tx_buf[UART_MAX_BUF_SIZE];
 
-/* UART �ڵ鷯  ���� ����   */
+/* UART 관련 HandleTypeDef 선언   */
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 DMA_HandleTypeDef hdma_usart1_rx;

@@ -23,28 +23,39 @@
 /*
  * @brief	Directly send commands, no parameters returned
  * @note 	DFplayer의 동작 명령어
+ * @warning 기본 : 최대 99개 폴더 지원, 각 폴더에 최대 255개 트랙 지원
+ *			특수 : MP3 또는 ADVERT폴더 생성 시 해당 폴더 안 에는 3000개 트랙 지원
+ * 			     MP3 폴더는 사실 최대 65536 트랙을 지원하지만 속도가 느려지므로 3000개의 트랙만 사용할 것 을 권장
  *
  */
 
 /* Control Commands */
 #define CMD_NEXT                      0x01    //   다음곡 재생
 #define CMD_PREVIOUS                  0x02    //   이전곡 재생
-#define CMD_SET_TRAK_NUMBER           0x03    //   트랙 번호 지정					1 ~ 3000 (or 0 ~ 2999) (ADVERT라는 특수 폴더 사용시 3000 트랙까지 지원하므로, 기본폴더는 255 트랙이 최대)
+#define CMD_SET_TRAK_NUMBER           0x03    //   트랙 번호 지정						1 ~ 3000 (or 0 ~ 2999)
 #define CMD_INC_VOLUME                0x04    //   볼륨 증가
 #define CMD_DEC_VOLUME                0x05    //   볼륨 감소
-#define CMD_SET_VOLUME                0x06    //   특정 볼륨 값 지정				0 ~ 30
-#define CMD_SET_EQ                    0x07    //   EQ (음향효과) 지정			0 : Normal / 1 : Pop / 2 : Rock / 3 : Jazz / 4 : Classic / 5 : Base
-#define CMD_SET_PLAYBACK_MODE         0x08    //   재생 모드 지정					0 : Repeat / 1 : folder repeat / 2 : single repeat / 3 : random
-#define CMD_SET_PLAYBACK_SOURCE       0x09    //   재생 시킬 저장 장치 지정			0 : U / 1 : TF / 2 : AUX / 3 : SLEEP / 4 : FLASH
+#define CMD_SET_VOLUME                0x06    //   특정 볼륨 값 지정					0 ~ 30
+#define CMD_SET_EQ                    0x07    //   EQ (음향효과) 지정				0 : Normal / 1 : Pop / 2 : Rock / 3 : Jazz / 4 : Classic / 5 : Base
+#define CMD_REPEAT_TRACK              0x08    //   트랙 반복 재생
+#define CMD_SET_PLAYBACK_SOURCE       0x09    //   재생 시킬 저장 장치 지정				0 : U / 1 : TF / 2 : AUX / 3 : SLEEP / 4 : FLASH
 #define CMD_ENTER_INTO_STANDBY        0x0A    //   저전력 모드 진입
 //#define CMD_NORMAL_WORK               0x0B		   N/A
 #define CMD_RESET                     0x0C    //   모듈 초기화
 #define CMD_PLAYBACK                  0x0D    //   재생
 #define CMD_PAUSE                     0x0E    //   일시 정지
-#define CMD_SET_PLAY_TRACK_FOLDER     0x0F    //   재생 폴더 및 트랙 지정			folder : 01 ~ 99 / track : 001 ~ 255 ( 기본 형식 : 최대 99개 폴더 지원, 각 폴더에 최대 255개 트랙 지원 / cf) 예외적으로 ADVERT폴더 생성 시 ADVERT 폴더 안 에는 3000개 트랙 지원)
-#define CMD_VOLUME_ADJUST             0x10    //   볼륨 조정					Parameter_MSB= 1: Open volume adjust / Parameter_LSB = set volume gain 0 ~ 31
-#define CMD_REPEAT					  0x11    //   반복 재생					0 : stop play / 1 : start repeat play
-
+#define CMD_SET_PLAY_TRACK_FOLDER     0x0F    //   재생 폴더 및 트랙 지정				folder : 01 ~ 99 / track : 001 ~ 255
+#define CMD_VOLUME_ADJUST             0x10    //   볼륨 조정						Parameter_MSB= 1: Open volume adjust / Parameter_LSB = set volume gain 0 ~ 31
+#define CMD_REPEAT					  0x11    //   반복 재생						0 : stop play / 1 : start repeat play
+#define CMD_SET_MP3_FOLDER            0x12    //   MP3라는 폴더가 있을 시 재생폴더로 지정
+#define CMD_INSERT_ADVERT			  0x13    //   인터럽트 재생
+#define CMD_SET_3K_FOLDER			  0x14    //   3K 지원하는 폴더 내 트랙 재생
+#define CMD_STOP_ADVERT_GOBACK        0x15    //   인터럽트 재생 멈추고 복귀
+#define CMD_STOP                      0x16    //   정지
+#define CMD_REPEAT_FOLDER_TRACK       0x17    //   지정한 폴더내 반복재생
+#define CMD_RANDOM_PLAY               0x18    //   랜덤 재생
+#define CMD_REPEAT_CURRENT_TRACK      0x19    //   현재 트랙 반복재생
+#define CMD_SET_DAC                   0x1A    //   DAC 설정
 
 /*
  * @brief	Query the System Parameters
@@ -88,12 +99,6 @@
 #define EQ_CLASSIC                     4
 #define EQ_BASE                        5
 
-//Playback Mode Parameter
-#define PLAYBACK_MODE_REPEAT           0
-#define PLAYBACK_MODE_FOLDER_REPEAT    1
-#define PLAYBACK_MODE_SINGLE_REPEAT    2
-#define PLAYBACK_MODE_RANDOM           3
-
 //Playback Source Parameter
 #define PLAYBACK_SOURCE_U              0
 #define PLAYBACK_SOURCE_TF             1
@@ -112,11 +117,11 @@
  * @note	DFPlayer와 MCU 간 UART로  통신하되, DFPlayer 직렬 포멧을 지켜야함
  *
  *     0        1            2          3          4             5               6              7              8           9
- * |  Start | Version | Data_Length |  CMD  |  Feedback   | Parameter_MSB  | Parameter_LSB | Checksum_MSB | Checksum_LSB |  End  |
+ * |  Start | Version | Data_Length |  CMD  |  Feedback  | Parameter_MSB | Parameter_LSB | Checksum_MSB | Checksum_LSB |  End  |
  * -----------------------------------------------------------------------------------------------------------------------------
- * |  0x7E  |   0xFF  |     0x06    |       |  0x01/0x00  |                |               |              |              |       |                                                   0xEF
+ * |  0x7E  |  0xFF   |     0x06    |       |  0x01/0x00 |               |               |              |              |       |                                                   0xEF
  * -----------------------------------------------------------------------------------------------------------------------------
- * |  고정값 |  고정값 |    고정값    |       |  사용/사용x  |   DH라고도 함  |  DL이라고도 함 |              |              | 고정값 |
+ * |  고정값    |   고정값     |    고정값           |       |  사용/사용x   |    DH라고도 함       |   DL이라고도 함      |              |              |  고정값  |
  *
  *
  * @ Start 	 	   : 시작 바이트
@@ -166,19 +171,24 @@ void dfplayer_IncreaseVolume(void);
 void dfplayer_DecreaseVolume(void);
 void dfplayer_SetVolume(uint8_t volume);
 void dfplayer_SetEQ(int8_t eq);
-void dfplayer_SetMode(uint8_t mode);
+void dfplayer_RepeatTrack(uint8_t track);
 void dfplayer_SetSource(uint8_t source);
 void dfplayer_Standby(void);
 void dfplayer_Reset(void);
 void dfplayer_Play(void);
 void dfplayer_Pause(void);
 void dfplayer_PlayTrackInFolder(uint8_t folder, uint8_t track);
-void dfplayer_VolumeAdjust( uint8_t gain);
-void dfplayer_Repeat(uint8_t repeat);
-
-
-
-
+void dfplayer_VolumeAdjust(bool turn_onoff, uint8_t gain);
+void dfplayer_RepeatAll(bool repeat);
+void dfplayer_PlayMP3Folder(uint16_t track);
+void dfplayer_InsertAdvertisement(uint16_t track);
+void dfplayer_Play3KFolder(uint8_t folder, uint16_t track);
+void dfplayer_StopAdvertisement(void);
+void dfplayer_Stop(void);
+void dfplayer_RepeatTrackInFolder(uint8_t folder);
+void dfplayer_RandomTrack(void);
+void dfplayer_RepeatCurrentTrack(bool turn_onoff);
+void dfplayer_SetDAC(bool turn_onoff);
 
 #endif /* _USE_HW_DFPLAYER */
 
