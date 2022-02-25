@@ -79,10 +79,9 @@ void apDFPlayerTest(void)
 
 	char rx_data;
 
-	dfplayer_SetSource(PLAYBACK_SOURCE_TF);
-	dfplayer_SetVolume(10);
-	dfplayer_SetEQ(EQ_CLASSIC);
-//	dfplayer_RepeatTrack(1);
+	dfplayer_SetSource(PLAYBACK_SOURCE_TF); /* 저장장치 SD카드로 설정 */
+	dfplayer_SetVolume(10); /* 초기 볼륨 10으로 설정 */
+	dfplayer_SetEQ(EQ_CLASSIC); /* EQ를 클래식으로 설정 */
 
 	while(1)
 	{
@@ -94,60 +93,49 @@ void apDFPlayerTest(void)
 			switch (rx_data)
 			{
 				case 'S':
-					dfplayer_Play();
+					dfplayer_Play(); /* 음악 재생  */
 					uartPrintf(_DEF_UART2, "Playing...\r\n");
 					break;
 
 				case 'D':
-					dfplayer_Next();
+					dfplayer_Next(); /* 다음곡 재생  */
 					uartPrintf(_DEF_UART2, "Playing Next Song...\r\n");
 					break;
 
 				case 'A':
-					dfplayer_Previous();
+					dfplayer_Previous(); /* 이전곡 재생  */
 					uartPrintf(_DEF_UART2, "Playing Previous Song...\r\n");
 					break;
 
 				case 'Q':
-					dfplayer_Pause();
+					dfplayer_Pause(); /* 일시정지  */
 					uartPrintf(_DEF_UART2, "Pause\r\n");
 					break;
 
 				case 'W':
-					dfplayer_IncreaseVolume();
+					dfplayer_IncreaseVolume(); /* 볼륨 증가  */
 					uartPrintf(_DEF_UART2, "Volume Up\r\n");
 					break;
 
 				case 'X':
-					dfplayer_DecreaseVolume();
+					dfplayer_DecreaseVolume(); /* 볼륨 감소 */
 					uartPrintf(_DEF_UART2, "Volume Down\n");
 					break;
 
 				case 'V':
-					dfplayer_Stop();
+					dfplayer_Stop(); /* 정지 */
 					uartPrintf(_DEF_UART2, "Stop\n");
 					break;
 
 				case 'E':
-					dfplayer_InsertAdvertisement(1);
+					dfplayer_InsertAdvertisement(1); /* ADVERT폴더에 있는 음악 인터럽트 실행  */
 					uartPrintf(_DEF_UART2, "Ad Start\n");
 					break;
 
 				case 'T':
-					dfplayer_StopAdvertisement();
+					dfplayer_StopAdvertisement(); /* ADVERT 폴더에 있는 음악 인터럽트 정지 후 원래 실행하던 곡으로 복귀  */
 					uartPrintf(_DEF_UART2, "AD Stop & Go Back\n");
 					break;
-
-				case 'K':
-					dfplayer_Play3KFolder(2, 3000);
-					uartPrintf(_DEF_UART2, "Test\n");
-					break;
-
-				case 'L':
-					dfplayer_RepeatTrackInFolder(0x02);
-					uartPrintf(_DEF_UART2, "Test\n");
-					break;
-
 
 				default:
 					break;
