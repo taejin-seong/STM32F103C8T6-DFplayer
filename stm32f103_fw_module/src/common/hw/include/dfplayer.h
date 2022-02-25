@@ -112,11 +112,11 @@
  * @note	DFPlayer와 MCU 간 UART로  통신하되, DFPlayer 직렬 포멧을 지켜야함
  *
  *     0        1            2          3          4             5               6              7              8           9
- * |  Start | Version | Data_Length |  CMD  |  Feedback  | Parameter_MSB | Parameter_LSB | Checksum_MSB | Checksum_LSB |  End  |
+ * |  Start | Version | Data_Length |  CMD  |  Feedback   | Parameter_MSB  | Parameter_LSB | Checksum_MSB | Checksum_LSB |  End  |
  * -----------------------------------------------------------------------------------------------------------------------------
- * |  0x7E  |  0xFF   |     0x06    |       |  0x01/0x00 |               |               |              |              |       |                                                   0xEF
+ * |  0x7E  |   0xFF  |     0x06    |       |  0x01/0x00  |                |               |              |              |       |                                                   0xEF
  * -----------------------------------------------------------------------------------------------------------------------------
- * |  고정값    |   고정값     |    고정값           |       |  사용/사용x   |    DH라고도 함       |   DL이라고도 함      |              |              |  고정값  |
+ * |  고정값 |  고정값 |    고정값    |       |  사용/사용x  |   DH라고도 함  |  DL이라고도 함 |              |              | 고정값 |
  *
  *
  * @ Start 	 	   : 시작 바이트
