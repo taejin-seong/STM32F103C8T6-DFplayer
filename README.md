@@ -6,7 +6,8 @@
 
 ## Where's the file?<br>
 #### •  &nbsp; stm32f103_fw_module → src → common → hw → include → dfplayer.h
-#### •  &nbsp; stm32f103_fw_module → src → hw → driver → dfplayer.c<br><br>
+#### •  &nbsp; stm32f103_fw_module → src → hw → driver → dfplayer.c
+#### •  &nbsp; stm32f103_fw_module → src → ap → ap.c → void apDFPlayerTest(void){...} <br><br>
 
 ## Note<br>
 #### Query command function has not yet been implemented. <br>
