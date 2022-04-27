@@ -1,5 +1,3 @@
-<br>
-
 ## Block diagram<br>
 ![d](https://user-images.githubusercontent.com/70312248/155701830-a8415f90-bfb7-4327-8f12-9a5dc024cb1e.png) <br><br>
 
